@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beszélgetőkör – ötlettár</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7F6; --panel:#FFFFFF; --ink:#22303C; --ink2:#55636E; --ink3:#83909A;
+  --line:#D8DEDC; --soft:#E9EEEC;
+  --r-rah:#D9892B; --r-fo:#2E7D74; --r-lez:#6B4F8E; --r-tel:#22303C;
+  --r-rah-bg:#FBF1E4; --r-fo-bg:#E6F2F0; --r-lez-bg:#EFEAF5; --r-tel-bg:#E7EBEF;
+  --focus:#2E7D74;
+  --ui:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --read:"Literata",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.45}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+a{color:var(--r-fo)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.top-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:12px 24px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);background:none;border:0;padding:0}
+.brand svg{flex:none}
+.brand b{font-size:19px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.brand span{display:block;font-size:12.5px;color:var(--ink2);font-weight:500;text-align:left}
+.search{flex:1;position:relative;max-width:720px}
+.search input{width:100%;height:46px;border:1.5px solid var(--line);background:var(--panel);border-radius:23px;padding:0 44px 0 46px;font-size:16px}
+.search input:focus{border-color:var(--r-fo);outline:none;box-shadow:0 0 0 3px rgba(46,125,116,.18)}
+.search .ico{position:absolute;left:16px;top:13px;color:var(--ink3)}
+.search .clr{position:absolute;right:8px;top:7px;width:32px;height:32px;border-radius:16px;border:0;background:var(--soft);display:none}
+.search.has .clr{display:block}
+.planbtn{display:flex;align-items:center;gap:10px;height:46px;padding:0 16px 0 10px;border-radius:23px;border:1.5px solid var(--line);background:var(--panel);font-weight:600;white-space:nowrap}
+.planbtn:hover{border-color:var(--ink3)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:268px minmax(0,1fr);gap:32px;padding:24px}
+main{min-width:0}
+.side{position:sticky;top:96px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding-right:6px}
+.fg{border-bottom:1px solid var(--line);padding:14px 0}
+.fg:first-child{padding-top:0}
+.fg h3{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--ink)}
+.fg .hint{font-size:12.5px;color:var(--ink3);margin:-4px 0 8px}
+.opt{display:flex;align-items:center;gap:9px;padding:4px 6px;margin:0 -6px;border-radius:7px;font-size:14.5px;cursor:pointer}
+.opt:hover{background:var(--soft)}
+.opt input{width:17px;height:17px;accent-color:var(--r-fo);margin:0;flex:none}
+.opt .n{margin-left:auto;font-size:12.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.opt.zero{color:var(--ink3)}
+.dot{width:10px;height:10px;border-radius:5px;flex:none}
+details.area{margin:2px 0}
+details.area summary{list-style:none;display:flex;align-items:center;gap:8px;padding:5px 6px;margin:0 -6px;border-radius:7px;cursor:pointer;font-size:14.5px;font-weight:500}
+details.area summary::-webkit-details-marker{display:none}
+details.area summary:hover{background:var(--soft)}
+details.area summary .car{transition:transform .15s;color:var(--ink3)}
+details.area[open] summary .car{transform:rotate(90deg)}
+details.area summary .n{margin-left:auto;font-size:12.5px;color:var(--ink3)}
+details.area .inner{padding-left:16px;border-left:2px solid var(--soft);margin:2px 0 6px 9px}
+.resetall{margin-top:14px;border:0;background:none;color:var(--r-fo);font-weight:600;padding:4px 0}
+
+/* ---------- home ---------- */
+.hero{padding:28px 30px 30px;margin-bottom:8px;border-radius:20px;background:linear-gradient(120deg,#FFF1DC 0%,#FDE7E4 38%,#E6F1EE 72%,#E5EDF9 100%)}
+.hero h1{font-size:clamp(30px,3.4vw,44px);line-height:1.08;letter-spacing:-.02em;margin:0 0 6px;font-weight:700;max-width:22ch}
+.hero p{margin:0 0 22px;color:var(--ink2);font-size:17px;max-width:62ch}
+.sits{display:flex;flex-wrap:wrap;gap:10px}
+.sit{border:1.5px solid var(--line);background:var(--panel);border-radius:999px;padding:10px 16px;font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px}
+.sit[style]{background:var(--abg);border-color:transparent;color:var(--ac);font-weight:600}
+.sit[style] small{color:inherit;opacity:.65}
+.sit:hover{border-color:var(--ink)}
+.sit[style]:hover{border-color:var(--ac)}
+.sit small{color:var(--ink3);font-weight:500}
+.sit.dice{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sit.dice small{color:#C9D2D8}
+.sec{margin-top:36px}
+.sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.sec-h h2{margin:0;font-size:22px;letter-spacing:-.01em;padding-left:12px;border-left:5px solid var(--r-rah)}
+.sec-h p{margin:0;color:var(--ink2);font-size:14.5px}
+.sec-h .more{margin-left:auto;border:0;background:none;color:var(--r-fo);font-weight:600;padding:0}
+.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.area-t{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--ac);border-radius:14px;padding:14px 18px 16px}
+.area-t h3{color:var(--ac)}
+.area-t .tchip{border-color:transparent;font-weight:500}
+.area-t .tchip:hover{background:var(--panel)!important;border-color:var(--ac)}
+.area-t .tchip i{color:inherit;opacity:.7}
+.area-t header{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.area-t h3{margin:0;font-size:18px;cursor:pointer}
+.area-t h3:hover{text-decoration:underline;text-underline-offset:3px}
+.area-t header span{color:var(--ink3);font-size:13px}
+.area-t p{margin:0 0 10px;color:var(--ink2);font-size:14px}
+.tl{display:flex;flex-wrap:wrap;gap:6px}
+.tchip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 10px;font-size:13.5px}
+.tchip:hover{border-color:var(--ink3);background:var(--panel)}
+.tchip i{font-style:normal;color:var(--ink3);margin-left:4px;font-size:12px}
+
+/* ---------- results ---------- */
+.rh{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:16px}
+.rh .cnt{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-right:6px}
+.achip{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:5px 8px 5px 12px;font-size:13.5px}
+.achip span{opacity:.7}
+.rh .sort{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink2)}
+.rh select{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--panel)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px 12px 20px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:12px 0 0 12px;background:var(--rc)}
+.card:hover{border-color:var(--rc);box-shadow:0 4px 14px rgba(34,48,60,.08)}
+.card h4{color:var(--ink)}
+.card .role{font-size:12.5px;font-weight:600;color:var(--rc)}
+.card h4{margin:0;font-size:17.5px;line-height:1.25;letter-spacing:-.005em}
+.card .ex{margin:0;color:var(--ink2);font-size:14px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:12.5px;border-radius:999px;padding:2px 9px;background:var(--soft);color:var(--ink);white-space:nowrap}
+.pill.t{background:none;border:1px solid var(--line);color:var(--ink2);font-weight:500}
+.card footer{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:4px;font-size:12.5px;color:var(--ink3)}
+.badge{font-size:12px;font-weight:600;border-radius:6px;padding:2px 7px}
+.badge.k{background:var(--r-fo-bg);color:var(--r-fo)}
+.badge.o{background:var(--soft);color:var(--ink2);font-weight:500}
+.badge.p{background:#FFF;border:1px solid var(--r-fo);color:var(--r-fo)}
+.addb{margin-left:auto;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:4px 9px;font-size:13px;font-weight:600;color:var(--ink)}
+.addb:hover{border-color:var(--ink)}
+.addb.in{background:var(--ink);color:#fff;border-color:var(--ink)}
+.morebar{display:flex;justify-content:center;margin:22px 0}
+.morebar button{border:1.5px solid var(--ink);background:var(--panel);border-radius:999px;padding:10px 22px;font-weight:600}
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:14px;padding:28px;max-width:640px}
+.empty h3{margin:0 0 6px}
+.empty p{margin:0 0 12px;color:var(--ink2)}
+.hscroll{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(290px,1fr);gap:14px;overflow-x:auto;padding-bottom:6px}
+
+/* ---------- drawers ---------- */
+.scrim{position:fixed;inset:0;background:rgba(34,48,60,.5);z-index:40;opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:50%;left:50%;width:min(920px,94vw);max-height:90vh;background:var(--panel);z-index:50;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(34,48,60,.28);opacity:0;pointer-events:none;transform:translate(-50%,-47%) scale(.97);transition:opacity .18s,transform .2s ease-out}
+.drawer.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.dhead{padding:24px 32px 20px;background:var(--rbg);border-bottom:1px solid var(--line);position:relative}
+.dhead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--rc)}
+.dclose{position:absolute;right:18px;top:16px;width:38px;height:38px;border-radius:19px;border:0;background:rgba(255,255,255,.7);font-size:20px}
+.dhead .role{font-weight:600;color:var(--rc);font-size:14px}
+.dhead h2{margin:4px 48px 10px 0;font-size:clamp(24px,2.6vw,32px);line-height:1.12;letter-spacing:-.015em}
+.dactions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.dactions button,.dactions a{border:1.5px solid var(--ink);background:var(--panel);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;text-decoration:none;color:var(--ink)}
+.dactions .pri{background:var(--ink);color:#fff}
+.dbody{overflow:auto;padding:24px 32px 40px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:26px}
+.tile{background:var(--paper);border-radius:10px;padding:10px 14px;font-size:14.5px}
+.tile h5{margin:0 0 3px;font-size:12.5px;color:var(--ink2);font-weight:600}
+.tile div{white-space:pre-line}
+.read{font-family:var(--read);font-size:17px;line-height:1.62;max-width:68ch}
+.read h3{font-family:var(--ui);font-size:18px;margin:28px 0 8px;letter-spacing:-.005em}
+.read h3:first-child{margin-top:0}
+.read p{margin:0 0 10px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{position:relative;padding-left:40px;margin-bottom:12px}
+.steps li .num{position:absolute;left:0;top:2px;width:27px;height:27px;border-radius:14px;background:var(--rc);color:#fff;font-family:var(--ui);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.qs{margin:0;padding-left:22px}
+.qs li{margin-bottom:6px}
+.note{background:var(--paper);border-left:4px solid var(--rc);padding:12px 16px;border-radius:0 10px 10px 0}
+.src{font-family:var(--ui);font-size:13.5px;color:var(--ink2);margin-top:30px;padding-top:14px;border-top:1px solid var(--line)}
+.sim{margin-top:34px;font-family:var(--ui)}
+.sim h3{font-size:18px;margin:0 0 10px}
+.sim .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+
+/* ---------- plan (összerakó) ---------- */
+.plan .dhead{--rc:var(--ink);--rbg:var(--paper)}
+.ringbox{display:flex;align-items:center;gap:26px;margin-bottom:22px}
+.ringbox .tot{font-size:15px;color:var(--ink2)}
+.ringbox .tot b{display:block;font-size:30px;color:var(--ink);letter-spacing:-.02em}
+.ringbox .warn{color:#A4472B;font-weight:600}
+.plist{list-style:none;margin:0;padding:0}
+.plist li{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:6px solid var(--rc)}
+.plist li .t{flex:1}
+.plist li .t b{display:block;font-size:15.5px;cursor:pointer}
+.plist li .t span{font-size:13px;color:var(--ink2)}
+.plist li button{border:0;background:var(--soft);border-radius:7px;width:30px;height:30px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink2);margin-bottom:16px}
+.legend span{display:flex;align-items:center;gap:6px}
+
+/* ---------- print ---------- */
+#print{display:none}
+@media print{
+  body>*:not(#print){display:none!important}
+  #print{display:block;font-family:var(--read);color:#000}
+  #print .pc{page-break-after:always;padding:0 4mm}
+  #print .pc:last-child{page-break-after:auto}
+  #print h1{font-family:var(--ui);font-size:22pt;margin:0 0 4pt}
+  #print .pm{font-family:var(--ui);font-size:10pt;color:#333;margin-bottom:10pt}
+  #print h3{font-family:var(--ui);font-size:12pt;margin:12pt 0 4pt}
+  #print p,#print li{font-size:11pt;line-height:1.45;margin:0 0 4pt}
+  #print .ptile{font-family:var(--ui);font-size:10pt;margin:0 0 3pt}
+}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;padding:16px}
+  .side{position:static;max-height:none;display:none}
+  .side.open{display:block}
+  .top-in{flex-wrap:wrap;padding:10px 16px;gap:10px}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .filtbtn{display:inline-flex!important}
+  .dhead,.dbody{padding-left:22px;padding-right:20px}
+}
+.filtbtn{display:none;border:1.5px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 14px;font-weight:600}
+
+/* ---------- zár ---------- */
+.lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(120deg,#FFF1DC 0%,#FDE7E4 38%,#E6F1EE 72%,#E5EDF9 100%)}
+.lock[hidden]{display:none}
+.lock form{background:var(--panel);border-radius:20px;padding:34px 34px 28px;width:min(440px,100%);box-shadow:0 24px 60px rgba(34,48,60,.16)}
+.lock h1{margin:14px 0 6px;font-size:28px;letter-spacing:-.02em;line-height:1.1}
+.lock p{margin:0 0 18px;color:var(--ink2)}
+.lock input{width:100%;height:48px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;font-size:16px}
+.lock input:focus{outline:none;border-color:var(--r-fo);box-shadow:0 0 0 3px rgba(46,125,116,.18)}
+.lock button{margin-top:12px;width:100%;height:48px;border:0;border-radius:12px;background:var(--ink);color:#fff;font-weight:600;font-size:16px}
+.lock button[disabled]{opacity:.6}
+.lock .err{color:#A4472B;font-weight:600;min-height:22px;margin:10px 0 0;font-size:14.5px}
+.lock .rem{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;color:var(--ink2)}
+.lock .rem input{width:17px;height:17px;accent-color:var(--r-fo)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <button class="brand" id="home" aria-label="Kezdőlap">
+      <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
+        <g fill="none" stroke-width="5">
+          <circle cx="19" cy="19" r="14" stroke="#E9EEEC"/>
+          <circle cx="19" cy="19" r="14" stroke="#D9892B" stroke-dasharray="14.7 88" transform="rotate(-90 19 19)"/>
+          <circle cx="19" cy="19" r="14" stroke="#2E7D74" stroke-dasharray="0 16.7 51 88" transform="rotate(-90 19 19)"/>
+          <circle cx="19" cy="19" r="14" stroke="#6B4F8E" stroke-dasharray="0 70 16 88" transform="rotate(-90 19 19)"/>
+        </g>
+      </svg>
+      <div><b>Beszélgetőkör</b><span>ötlettár a reggeli körhöz</span></div>
+    </button>
+    <div class="search" id="sbox">
+      <svg class="ico" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <label for="q" class="vh">Keresés</label>
+      <input id="q" type="search" autocomplete="off" placeholder="Keress bármire: érzelmek, bizalom, év eleje, kártya…">
+      <button class="clr" id="qclr" aria-label="Keresés törlése">✕</button>
+    </div>
+    <button class="filtbtn" id="filtbtn">Szűrők</button>
+    <button class="planbtn" id="planbtn" aria-label="Összerakó megnyitása">
+      <svg width="28" height="28" viewBox="0 0 28 28" id="miniring" aria-hidden="true"></svg>
+      <span id="planlbl">Összerakó</span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="side" id="side" aria-label="Szűrők"></aside>
+  <main id="main"></main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<section class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle"></section>
+<section class="drawer plan" id="plan" role="dialog" aria-modal="true" aria-labelledby="ptitle"></section>
+<div id="print"></div>
+<div class="lock" id="lock" hidden>
+  <form id="lockform" autocomplete="on">
+    <svg width="46" height="46" viewBox="0 0 38 38" aria-hidden="true"><g fill="none" stroke-width="5"><circle cx="19" cy="19" r="14" stroke="#E9EEEC"/><circle cx="19" cy="19" r="14" stroke="#D9892B" stroke-dasharray="14.7 88" transform="rotate(-90 19 19)"/><circle cx="19" cy="19" r="14" stroke="#2E7D74" stroke-dasharray="0 16.7 51 88" transform="rotate(-90 19 19)"/><circle cx="19" cy="19" r="14" stroke="#6B4F8E" stroke-dasharray="0 70 16 88" transform="rotate(-90 19 19)"/></g></svg>
+    <h1>Beszélgetőkör-ötlettár</h1>
+    <p>A Diákszempont tantestületének belső oldala. Add meg a tantestületi jelszót.</p>
+    <input type="text" name="username" value="tantestulet" autocomplete="username" hidden>
+    <label for="pw" class="vh">Jelszó</label>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Jelszó" required>
+    <label class="rem"><input type="checkbox" id="rem" checked> Jegyezze meg ez a gép</label>
+    <button id="pwgo">Belépés</button>
+    <p class="err" id="pwerr" role="alert"></p>
+  </form>
+</div>
+
+
+<script>
+window.BK_START = (DATA) => {
+"use strict";
+
+const LIST_URL = "https://dszp.sharepoint.com/sites/Tanrok802/Lists/Beszelgetokor/DispForm.aspx?ID=";
+
+/* ---------- taxonómia ---------- */
+const AREAS = [
+  { c:"#D9534A", bg:"#FCE8E5", name:"Én és az érzéseim", desc:"Önismeret, érzelmek, megküzdés.", themes:["Önismeret","Önbizalom és önértékelés","Érzelmek","Stressz és megküzdés","Egészség és életmód"] },
+  { c:"#B8417A", bg:"#F8E3ED", name:"Kapcsolatok", desc:"Figyelem egymásra, elfogadás, konfliktusok.", themes:["Kommunikáció és figyelem","Empátia","Barátság és párkapcsolat","Elfogadás és másság","Konfliktus","Bullying és kirekesztés"] },
+  { c:"#2F8F4E", bg:"#E2F2E6", name:"Osztályközösség", desc:"Ismerkedés, közös munka, közös szabályok.", themes:["Ismerkedés","Osztályközösség","Együttműködés","Megállapodások és szabályok"] },
+  { c:"#2F6DB5", bg:"#E3ECF8", name:"Gondolkodás és értékek", desc:"Vita, döntések, a világ dolgai.", themes:["Értékek","Vita és véleményalkotás","Döntés és felelősség","Problémamegoldás","Digitális élet és média","Aktuális ügyek"] },
+  { c:"#6F8A12", bg:"#EEF3DA", name:"Tanulás és jövő", desc:"Célok, tanulás, pályaválasztás.", themes:["Célok és motiváció","Tanulás és időbeosztás","Továbbtanulás és pálya"] },
+  { c:"#1B8FA8", bg:"#DFF1F5", name:"Reggeli ritmus", desc:"Gyors indítók, játékok, visszatekintés.", themes:["Hangulat és check-in","Játék és energizáló","Visszatekintés"] },
+];
+const T2A = {}; AREAS.forEach(A=>A.themes.forEach(t=>T2A[t]=A));
+const tStyle = t => { const A=T2A[t]; return A?`style="background:${A.bg};color:${A.c};border-color:transparent"`:""; };
+const SITS = [
+  { label:"Új osztály, év eleje", f:{Temak:["Ismerkedés","Osztályközösség","Megállapodások és szabályok"]} },
+  { label:"Álmos, fáradt reggel", f:{Temak:["Játék és energizáló","Hangulat és check-in"]} },
+  { label:"Feszültség volt az osztályban", f:{Temak:["Konfliktus","Bullying és kirekesztés","Empátia","Elfogadás és másság"]} },
+  { label:"Dolgozat, vizsga előtt", f:{Temak:["Stressz és megküzdés","Tanulás és időbeosztás","Célok és motiváció"]} },
+  { label:"Közös munka indul", f:{Temak:["Együttműködés","Problémamegoldás","Kommunikáció és figyelem"]} },
+  { label:"Hét vagy félév vége", f:{Temak:["Visszatekintés","Hangulat és check-in"]} },
+  { label:"Pályaválasztás", f:{Temak:["Továbbtanulás és pálya","Célok és motiváció","Önismeret"]} },
+  { label:"Vitatéma van a levegőben", f:{Temak:["Vita és véleményalkotás","Aktuális ügyek","Értékek","Digitális élet és média"]} },
+  { label:"Csak negyedórám van", f:{Idotartam:["5 perc","10–15 perc"]} },
+];
+const ROLE = {
+  "Ráhangolódás":{c:"var(--r-rah)",bg:"var(--r-rah-bg)",hex:"#D9892B",o:0},
+  "Fő gyakorlat":{c:"var(--r-fo)",bg:"var(--r-fo-bg)",hex:"#2E7D74",o:1},
+  "Lezárás":{c:"var(--r-lez)",bg:"var(--r-lez-bg)",hex:"#6B4F8E",o:2},
+  "Teljes kör":{c:"var(--r-tel)",bg:"var(--r-tel-bg)",hex:"#22303C",o:1},
+};
+const AGE_LBL = {"Alsó":"Alsó tagozat","Felső":"Felső tagozat","Gimi":"Gimnázium"};
+const DUR = {"5 perc":[5,5],"10–15 perc":[10,15],"20–30 perc":[20,30]};
+const FACETS = [
+  {key:"Korosztaly", title:"Korosztály", vals:["Alsó","Felső","Gimi"], lbl:v=>AGE_LBL[v]},
+  {key:"Idotartam", title:"Időtartam", vals:["5 perc","10–15 perc","20–30 perc"]},
+  {key:"SzerepAKorben", title:"Szerep a körben", vals:["Ráhangolódás","Fő gyakorlat","Lezárás","Teljes kör"], dot:v=>ROLE[v].hex},
+  {key:"Temak", title:"Témák", areas:true},
+  {key:"Kidolgozottsag", title:"Kidolgozottság", vals:["Kidolgozott","Ötlettár"], hint:"A kidolgozott kártyákat a kollégák vagy mi írtuk meg részletesen."},
+  {key:"Kiprobalva", title:"Kipróbálva", vals:["igen"], lbl:()=>"Csak a kollégák által kipróbáltak"},
+  {key:"Csoportforma", title:"Csoportforma", vals:["Egész kör","Pár","Kiscsoport","Egyéni"], hint:"Egyelőre csak a kidolgozott kártyáknál van megadva."},
+  {key:"Tipus", title:"Típus", vals:["Gyakorlat","Kész csomag"], lbl:v=>v==="Kész csomag"?"Kész 30 perces csomag":"Egyedi gyakorlat"},
+];
+
+/* ---------- adatok előkészítése ---------- */
+const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const esc = s => (s||"").toString().replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const arr = v => v==null ? [] : Array.isArray(v) ? v : [v];
+const W = [["Title",6],["Temak",3],["MikorJo",2],["Eszkoz",1.5],["Menet",1],["Megbeszeles",1],["Variaciok",1],["MireFigyelj",.8],["Elokeszites",.6],["Forras",.6]];
+const CARDS = DATA.cards.map(c => {
+  const x = Object.assign({}, c);
+  x.ages = arr(c.Korosztaly); x.themes = arr(c.Temak); x.forms = arr(c.Csoportforma);
+  x.role = ROLE[c.SzerepAKorben] ? c.SzerepAKorben : "Fő gyakorlat";
+  x.kid = c.Kidolgozottsag === "Kidolgozott";
+  x.tried = !!c.Kiprobalva;
+  x.idx = W.map(([k,w]) => [norm(arr(c[k]).join(" ")), w]);
+  x.ntitle = norm(c.Title);
+  x.base = (x.kid?2:0) + (x.tried?1.5:0) + (c.Tipus==="Kész csomag"?1:0);
+  return x;
+});
+const BYID = new Map(CARDS.map(c=>[c.Id,c]));
+const valOf = (c,key) => key==="Korosztaly"?c.ages : key==="Temak"?c.themes : key==="Csoportforma"?c.forms : key==="Kiprobalva"?(c.tried?["igen"]:[]) : arr(c[key]);
+
+/* ---------- állapot ---------- */
+let state = { q:"", f:{}, sort:"rel", shown:48 };
+let plan = [];
+try { plan = JSON.parse(localStorage.getItem("bk-plan")||"[]").filter(id=>BYID.has(id)); } catch(e) { plan = []; }
+const savePlan = () => { try { localStorage.setItem("bk-plan", JSON.stringify(plan)); } catch(e) {} };
+
+const active = () => state.q.trim() || Object.values(state.f).some(v=>v&&v.length);
+
+function matchFacets(c, except) {
+  for (const k in state.f) {
+    if (k===except) continue;
+    const want = state.f[k]; if (!want || !want.length) continue;
+    const have = valOf(c,k);
+    if (!want.some(w=>have.includes(w))) return false;
+  }
+  return true;
+}
+function scoreQ(c, toks) {
+  if (!toks.length) return 0;
+  let total = 0;
+  for (const t of toks) {
+    let s = 0;
+    for (const [txt,w] of c.idx) if (txt.includes(t)) s += w;
+    if (!s) return -1;
+    if (c.ntitle.startsWith(t)) s += 3;
+    total += s;
+  }
+  return total;
+}
+function compute() {
+  const toks = norm(state.q).split(/\s+/).filter(t=>t.length>1);
+  const qs = new Map();
+  for (const c of CARDS) { const s = scoreQ(c,toks); if (s>=0) qs.set(c.Id,s); }
+  const res = CARDS.filter(c=>qs.has(c.Id) && matchFacets(c,null));
+  if (state.sort==="abc") res.sort((a,b)=>a.Title.localeCompare(b.Title,"hu"));
+  else res.sort((a,b)=>(qs.get(b.Id)+b.base)-(qs.get(a.Id)+a.base) || a.Title.localeCompare(b.Title,"hu"));
+  const counts = {};
+  for (const F of FACETS) {
+    const m = {}; counts[F.key] = m;
+    for (const c of CARDS) { if (!qs.has(c.Id) || !matchFacets(c,F.key)) continue; for (const v of valOf(c,F.key)) m[v]=(m[v]||0)+1; }
+  }
+  counts.areas = AREAS.map(A => CARDS.filter(c => qs.has(c.Id) && matchFacets(c,"Temak") && c.themes.some(t=>A.themes.includes(t))).length);
+  return {res, counts};
+}
+
+/* ---------- URL-állapot (megosztható linkek) ---------- */
+function toHash() {
+  const p = new URLSearchParams();
+  if (state.q) p.set("q", state.q);
+  for (const k in state.f) if (state.f[k]?.length) p.set(k, state.f[k].join("|"));
+  if (openId) p.set("k", openId);
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#"+h : location.pathname);
+}
+function fromHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  state.q = p.get("q")||""; state.f = {};
+  for (const F of FACETS) if (p.get(F.key)) state.f[F.key] = p.get(F.key).split("|");
+  const k = +p.get("k"); return BYID.has(k) ? k : null;
+}
+
+/* ---------- renderelés ---------- */
+const $ = id => document.getElementById(id);
+const main = $("main"), side = $("side");
+
+function cardHTML(c) {
+  const R = ROLE[c.role];
+  const ex = (c.Menet||"").replace(/^\s*1\.\s*/,"").split("\n")[0];
+  const inPlan = plan.includes(c.Id);
+ const A0 = T2A[c.themes[0]];
+  return `<article class="card" style="--rc:${R.c};${A0?`--ac:${A0.c};`:""}" data-id="${c.Id}" tabindex="0" role="button" aria-label="${esc(c.Title)}">
+    <div class="role">${esc(c.Tipus==="Kész csomag"?"Kész csomag":c.role)}</div>
+    <h4>${esc(c.Title)}</h4>
+    <div class="meta"><span class="pill">${esc(c.Idotartam||"")}</span>${c.ages.map(a=>`<span class="pill">${esc(AGE_LBL[a]||a)}</span>`).join("")}</div>
+    <p class="ex">${esc(ex)}</p>
+    <div class="meta">${c.themes.map(t=>`<span class="pill t" ${tStyle(t)}>${esc(t)}</span>`).join("")}</div>
+    <footer>${c.kid?'<span class="badge k">Kidolgozott</span>':'<span class="badge o">Ötlettár</span>'}${c.tried?'<span class="badge p">✓ Kipróbálva</span>':""}
+      <button class="addb${inPlan?" in":""}" data-add="${c.Id}" aria-label="${inPlan?"Kivétel az összerakóból":"Hozzáadás az összerakóhoz"}">${inPlan?"✓ Összerakóban":"+ Összerakó"}</button></footer>
+  </article>`;
+}
+
+function renderSide(counts) {
+  const isOn = (k,v) => (state.f[k]||[]).includes(v);
+  const opt = (k,v,lbl,n,dot) => `<label class="opt${n?"":" zero"}"><input type="checkbox" data-k="${k}" data-v="${esc(v)}"${isOn(k,v)?" checked":""}>${dot?`<span class="dot" style="background:${dot}"></span>`:""}<span>${esc(lbl)}</span><span class="n">${n||0}</span></label>`;
+  let h = "";
+  for (const F of FACETS) {
+    const m = counts[F.key];
+    h += `<div class="fg"><h3>${F.title}</h3>${F.hint?`<p class="hint">${F.hint}</p>`:""}`;
+    if (F.areas) {
+      for (const [ai,A] of AREAS.entries()) {
+        const sel = A.themes.filter(t=>isOn("Temak",t)).length;
+        const n = counts.areas[ai];
+        h += `<details class="area"${sel?" open":""}><summary><span class="car">▸</span><span class="dot" style="background:${A.c}"></span>${esc(A.name)}${sel?` <b style="color:var(--r-fo)">(${sel})</b>`:""}<span class="n">${n}</span></summary><div class="inner">${A.themes.map(t=>opt("Temak",t,t,m[t])).join("")}</div></details>`;
+      }
+    } else {
+      for (const v of F.vals) h += opt(F.key, v, F.lbl?F.lbl(v):v, m[v], F.dot?F.dot(v):null);
+    }
+    h += `</div>`;
+  }
+  if (active()) h += `<button class="resetall" id="resetall">Minden szűrő törlése</button>`;
+  // nyitva hagyott témakörök megőrzése
+  const openAreas = [...side.querySelectorAll("details.area")].map((d,i)=>d.open?i:-1).filter(i=>i>=0);
+  side.innerHTML = h;
+  side.querySelectorAll("details.area").forEach((d,i)=>{ if (openAreas.includes(i)) d.open = true; });
+}
+
+function renderHome() {
+  const cnt = t => CARDS.filter(c=>c.themes.includes(t)).length;
+  const packs = CARDS.filter(c=>c.Tipus==="Kész csomag");
+  const tried = CARDS.filter(c=>c.tried && c.Tipus!=="Kész csomag").sort((a,b)=>b.base-a.base);
+  const sitN = s => CARDS.filter(c=>Object.entries(s.f).every(([k,v])=>v.some(x=>valOf(c,k).includes(x)))).length;
+  main.innerHTML = `
+  <section class="hero">
+    <h1>Mi kell ma reggel az osztályodnak?</h1>
+    <p>${CARDS.length} ötlet a reggeli körhöz. Indulj egy helyzetből, egy témakörből, vagy írd be a keresőbe, ami eszedbe jut.</p>
+    <div class="sits">
+      ${SITS.map((s,i)=>{ const A = s.f.Temak?T2A[s.f.Temak[0]]:{c:"#D9892B",bg:"#FBF1E4"}; return `<button class="sit" data-sit="${i}" style="--ac:${A.c};--abg:${A.bg}">${esc(s.label)} <small>${sitN(s)}</small></button>`;}).join("")}
+      <button class="sit dice" id="dice">Dobj egy ötletet <small>véletlen kidolgozott kártya</small></button>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="sec-h"><h2>Témakörök</h2><p>Kattints egy témára, vagy a témakör nevére az egészhez.</p></div>
+    <div class="areas">${AREAS.map((A,i)=>`<div class="area-t" style="--ac:${A.c};--abg:${A.bg}"><header><h3 data-area="${i}" tabindex="0" role="button">${esc(A.name)}</h3><span>${CARDS.filter(c=>c.themes.some(t=>A.themes.includes(t))).length} kártya</span></header><p>${esc(A.desc)}</p><div class="tl">${A.themes.map(t=>`<button class="tchip" data-theme="${esc(t)}" style="background:var(--abg);color:var(--ac)">${esc(t)}<i>${cnt(t)}</i></button>`).join("")}</div></div>`).join("")}</div>
+  </section>
+  ${packs.length?`<section class="sec"><div class="sec-h"><h2>Kész 30 perces csomagok</h2><p>Ráhangolódás, fő gyakorlat és lezárás egyben.</p></div><div class="grid">${packs.map(cardHTML).join("")}</div></section>`:""}
+  ${tried.length?`<section class="sec"><div class="sec-h"><h2>Kollégák kipróbálták</h2><p>Ezek már működtek nálunk.</p><button class="more" data-quick="tried">Mind a ${tried.length}</button></div><div class="hscroll">${tried.slice(0,8).map(cardHTML).join("")}</div></section>`:""}
+  `;
+}
+
+function renderResults(res) {
+  const chips = [];
+  if (state.q.trim()) chips.push(`<button class="achip" data-unq="1">„${esc(state.q.trim())}” <span>✕</span></button>`);
+  for (const F of FACETS) for (const v of (state.f[F.key]||[])) chips.push(`<button class="achip" data-unk="${F.key}" data-unv="${esc(v)}">${esc(F.lbl?F.lbl(v):v)} <span>✕</span></button>`);
+  let h = `<div class="rh"><span class="cnt">${res.length} kártya</span>${chips.join("")}
+    <label class="sort">Sorrend <select id="sort"><option value="rel"${state.sort==="rel"?" selected":""}>Ajánlott elöl</option><option value="abc"${state.sort==="abc"?" selected":""}>Cím szerint</option></select></label></div>`;
+  if (!res.length) {
+    h += `<div class="empty"><h3>Ezekkel a feltételekkel nincs kártya</h3><p>Vegyél ki egy szűrőt, vagy keress rövidebb szóra (például „érzelm” az „érzelmekről” helyett).</p><button class="sit" id="resetall2">Minden szűrő törlése</button></div>`;
+  } else {
+    h += `<div class="grid">${res.slice(0,state.shown).map(cardHTML).join("")}</div>`;
+    if (res.length>state.shown) h += `<div class="morebar"><button id="more">Még ${Math.min(48,res.length-state.shown)} kártya (összesen ${res.length})</button></div>`;
+  }
+  main.innerHTML = h;
+}
+
+function render() {
+  const {res, counts} = compute();
+  renderSide(counts);
+  if (active()) renderResults(res); else renderHome();
+  $("sbox").classList.toggle("has", !!state.q);
+  toHash();
+}
+
+/* ---------- részletes nézet ---------- */
+let openId = null;
+const lines = s => (s||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
+function stepsHTML(s) {
+  const L = lines(s);
+  const numbered = L.length>1 && L.filter(l=>/^\d+[.)]\s/.test(l)).length >= L.length/2;
+  if (!numbered) return L.map(l=>`<p>${esc(l)}</p>`).join("");
+  let n = 0;
+  return `<ol class="steps">${L.map(l=>{ const m=l.match(/^(\d+)[.)]\s+(.*)$/); if(m){n=+m[1];return `<li><span class="num">${n}</span>${esc(m[2])}</li>`;} return `<li style="padding-left:40px">${esc(l)}</li>`; }).join("")}</ol>`;
+}
+const qsHTML = s => { const L = lines(s); return L.length>1 ? `<ul class="qs">${L.map(l=>`<li>${esc(l.replace(/^[-•–]\s*/,""))}</li>`).join("")}</ul>` : `<p>${esc(L[0]||"")}</p>`; };
+const linkify = s => esc(s).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+
+function similar(c) {
+  return CARDS.filter(x=>x.Id!==c.Id).map(x=>{
+    let s = x.themes.filter(t=>c.themes.includes(t)).length*3 + x.ages.filter(a=>c.ages.includes(a)).length + (x.role===c.role?.5:0) + x.base*.3;
+    return [x,s];
+  }).filter(([,s])=>s>=4).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([x])=>x);
+}
+
+function openCard(id, push=true) {
+  const c = BYID.get(id); if (!c) return;
+  openId = id;
+  const R = ROLE[c.role]; const d = $("drawer");
+  const inPlan = plan.includes(c.Id);
+  const tiles = [["Eszköz",c.Eszkoz],["Előkészítés",c.Elokeszites],["Nyomtatnivaló",c.Nyomtatnivalo],["Mikor jó",c.MikorJo]].filter(([,v])=>v);
+  const sim = similar(c);
+  d.style.setProperty("--rc",R.c); d.style.setProperty("--rbg",R.bg);
+  d.innerHTML = `
+    <div class="dhead">
+      <button class="dclose" data-close aria-label="Bezárás">✕</button>
+      <div class="role">${esc(c.Tipus==="Kész csomag"?"Kész 30 perces csomag":c.role)}</div>
+      <h2 id="dtitle">${esc(c.Title)}</h2>
+      <div class="meta"><span class="pill">${esc(c.Idotartam||"")}</span>${c.ages.map(a=>`<span class="pill">${esc(AGE_LBL[a])}</span>`).join("")}${c.forms.map(f=>`<span class="pill">${esc(f)}</span>`).join("")}${c.themes.map(t=>`<span class="pill t" ${tStyle(t)}>${esc(t)}</span>`).join("")}</div>
+      <div class="dactions">
+        <button class="pri" data-add="${c.Id}">${inPlan?"✓ Benne van az összerakóban":"+ Összerakóba teszem"}</button>
+        <button data-print="${c.Id}">Nyomtatás</button>
+        <a href="${LIST_URL}${c.Id}" target="_blank" rel="noopener">Megnyitás a listában</a>
+        ${c.kid?'<span class="badge k" style="align-self:center">Kidolgozott</span>':'<span class="badge o" style="align-self:center">Ötlettár</span>'}${c.tried?'<span class="badge p" style="align-self:center">✓ Kipróbálva</span>':""}
+      </div>
+    </div>
+    <div class="dbody">
+      ${tiles.length?`<div class="tiles">${tiles.map(([k,v])=>`<div class="tile"><h5>${k}</h5><div>${esc(v)}</div></div>`).join("")}</div>`:""}
+      <div class="read">
+        <h3>Menet</h3>${stepsHTML(c.Menet)}
+        ${c.Megbeszeles?`<h3>Megbeszélés kérdései</h3>${qsHTML(c.Megbeszeles)}`:""}
+        ${c.MireFigyelj?`<h3>Mire figyelj</h3><div class="note">${lines(c.MireFigyelj).map(l=>`<p>${esc(l)}</p>`).join("")}</div>`:""}
+        ${c.Variaciok?`<h3>Variációk</h3>${lines(c.Variaciok).map(l=>`<p>${esc(l)}</p>`).join("")}`:""}
+        ${c.Forras?`<div class="src">Forrás: ${linkify(c.Forras)}</div>`:""}
+      </div>
+      ${sim.length?`<div class="sim"><h3>Hasonló kártyák</h3><div class="grid">${sim.map(cardHTML).join("")}</div></div>`:""}
+    </div>`;
+  showDrawer(d);
+  d.querySelector(".dbody").scrollTop = 0;
+  if (push) toHash();
+}
+let lastFocus = null;
+function showDrawer(d) {
+  [$("drawer"),$("plan")].forEach(x=>{ if(x!==d) x.classList.remove("on"); });
+  if (!d.classList.contains("on")) lastFocus = document.activeElement;
+  d.classList.add("on"); $("scrim").classList.add("on");
+  document.body.style.overflow = "hidden";
+  setTimeout(()=>d.querySelector("[data-close]")?.focus(), 30);
+}
+function closeDrawers() {
+  $("drawer").classList.remove("on"); $("plan").classList.remove("on"); $("scrim").classList.remove("on");
+  document.body.style.overflow = ""; openId = null; toHash();
+  lastFocus?.focus?.();
+}
+
+/* ---------- összerakó ---------- */
+function planCards() { return plan.map(id=>BYID.get(id)).filter(Boolean).sort((a,b)=>ROLE[a.role].o-ROLE[b.role].o); }
+function ringSVG(size, stroke, cards) {
+  const r = (size-stroke)/2, C = 2*Math.PI*r, cx = size/2;
+  let off = 0, segs = "";
+  for (const c of cards) {
+    const [a,b] = DUR[c.Idotartam]||[10,15]; const mid = (a+b)/2;
+    const len = Math.min(mid/30, Math.max(0,1-off)) * C;
+    if (len>0) segs += `<circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${ROLE[c.role].hex}" stroke-width="${stroke}" stroke-dasharray="${Math.max(len-2,1)} ${C}" stroke-dashoffset="${-off*C}" transform="rotate(-90 ${cx} ${cx})"/>`;
+    off += mid/30;
+  }
+  return `<circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="#E9EEEC" stroke-width="${stroke}"/>${segs}`;
+}
+function totals(cards) { let a=0,b=0; for (const c of cards) { const d=DUR[c.Idotartam]||[10,15]; a+=d[0]; b+=d[1]; } return [a,b]; }
+function renderPlanBtn() {
+  const pc = planCards();
+  $("miniring").innerHTML = ringSVG(28,6,pc);
+  $("planlbl").textContent = pc.length ? `Összerakó · ${pc.length}` : "Összerakó";
+}
+function openPlan() {
+  const pc = planCards(); const [a,b] = totals(pc); const p = $("plan");
+  const tot = !pc.length ? "0 perc" : a===b ? `${a} perc` : `${a}–${b} perc`;
+  p.innerHTML = `
+    <div class="dhead">
+      <button class="dclose" data-close aria-label="Bezárás">✕</button>
+      <div class="role">A te reggeli köröd</div>
+      <h2 id="ptitle">Összerakó</h2>
+      <p style="margin:0;color:var(--ink2);max-width:60ch">Tegyél ide kártyákat. Az összerakó szerep szerint sorba rendezi őket, és mutatja, hogy belefér-e a fél órába.</p>
+      ${pc.length?`<div class="dactions"><button class="pri" data-printplan>Mind kinyomtatom</button><button data-clearplan>Kiürítem</button></div>`:""}
+    </div>
+    <div class="dbody">
+      ${pc.length?`
+      <div class="ringbox"><svg width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">${ringSVG(150,22,pc)}<text x="75" y="80" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="20" font-weight="700" fill="#22303C">30 perc</text></svg>
+        <div class="tot">Becsült időtartam<b>${tot}</b>${b>30?'<span class="warn">Ez valószínűleg nem fér bele a fél órába.</span>':a<20?"Van még hely egy gyakorlatnak.":"Nagyjából kitölti a fél órát."}</div></div>
+      <div class="legend"><span><i class="dot" style="background:#D9892B"></i>Ráhangolódás</span><span><i class="dot" style="background:#2E7D74"></i>Fő gyakorlat</span><span><i class="dot" style="background:#6B4F8E"></i>Lezárás</span></div>
+      <ol class="plist">${pc.map(c=>`<li style="--rc:${ROLE[c.role].c}"><div class="t"><b data-open="${c.Id}">${esc(c.Title)}</b><span>${esc(c.role)}, ${esc(c.Idotartam||"")}</span></div><button data-add="${c.Id}" aria-label="Kivétel">✕</button></li>`).join("")}</ol>
+      ${!pc.some(c=>c.role==="Ráhangolódás")?`<p style="color:var(--ink2)">Nincs még ráhangolódás. <button class="tchip" data-quick="rah">Mutasd a ráhangolódásokat</button></p>`:""}
+      ${!pc.some(c=>c.role==="Lezárás")?`<p style="color:var(--ink2)">Nincs még lezárás. <button class="tchip" data-quick="lez">Mutasd a lezárásokat</button></p>`:""}
+      `:`<div class="empty"><h3>Még üres</h3><p>A kártyákon a „+ Összerakó” gombbal tehetsz ide gyakorlatokat. Egy jó kör általában egy rövid ráhangolódásból, egy fő gyakorlatból és egy lezárásból áll.</p></div>`}
+    </div>`;
+  showDrawer(p);
+}
+function togglePlan(id) {
+  plan = plan.includes(id) ? plan.filter(x=>x!==id) : plan.concat(id);
+  savePlan(); renderPlanBtn();
+  document.querySelectorAll(`[data-add="${id}"]`).forEach(b=>{
+    const inP = plan.includes(id);
+    if (b.classList.contains("addb")) { b.classList.toggle("in",inP); b.textContent = inP?"✓ Összerakóban":"+ Összerakó"; }
+    else if (b.classList.contains("pri")) b.textContent = inP?"✓ Benne van az összerakóban":"+ Összerakóba teszem";
+  });
+  if ($("plan").classList.contains("on")) openPlan();
+}
+
+/* ---------- nyomtatás ---------- */
+function printHTML(c) {
+  const t = [["Időtartam",c.Idotartam],["Korosztály",c.ages.map(a=>AGE_LBL[a]).join(", ")],["Eszköz",c.Eszkoz],["Előkészítés",c.Elokeszites],["Nyomtatnivaló",c.Nyomtatnivalo]].filter(([,v])=>v);
+  return `<div class="pc"><h1>${esc(c.Title)}</h1><div class="pm">${esc(c.role)} · ${esc(c.themes.join(", "))}</div>
+    ${t.map(([k,v])=>`<p class="ptile"><b>${k}:</b> ${esc(v)}</p>`).join("")}
+    <h3>Menet</h3>${lines(c.Menet).map(l=>`<p>${esc(l)}</p>`).join("")}
+    ${c.Megbeszeles?`<h3>Megbeszélés kérdései</h3>${lines(c.Megbeszeles).map(l=>`<p>${esc(l)}</p>`).join("")}`:""}
+    ${c.MireFigyelj?`<h3>Mire figyelj</h3>${lines(c.MireFigyelj).map(l=>`<p>${esc(l)}</p>`).join("")}`:""}
+    ${c.Variaciok?`<h3>Variációk</h3>${lines(c.Variaciok).map(l=>`<p>${esc(l)}</p>`).join("")}`:""}
+    ${c.Forras?`<p class="ptile" style="margin-top:10pt">Forrás: ${esc(c.Forras)}</p>`:""}</div>`;
+}
+function doPrint(cards) { $("print").innerHTML = cards.map(printHTML).join(""); window.print(); }
+
+/* ---------- események ---------- */
+let qTimer;
+$("q").addEventListener("input", e => { clearTimeout(qTimer); qTimer = setTimeout(()=>{ state.q = e.target.value; state.shown = 48; render(); window.scrollTo({top:0}); }, 120); });
+$("qclr").addEventListener("click", () => { $("q").value=""; state.q=""; render(); $("q").focus(); });
+$("home").addEventListener("click", () => { state = {q:"",f:{},sort:"rel",shown:48}; $("q").value=""; closeDrawers(); render(); window.scrollTo({top:0}); });
+$("planbtn").addEventListener("click", openPlan);
+$("filtbtn").addEventListener("click", () => side.classList.toggle("open"));
+$("scrim").addEventListener("click", closeDrawers);
+document.addEventListener("keydown", e => {
+  if (e.key==="Escape" && $("scrim").classList.contains("on")) closeDrawers();
+  if (e.key==="/" && document.activeElement.tagName!=="INPUT") { e.preventDefault(); $("q").focus(); }
+  if ((e.key==="Enter"||e.key===" ") && e.target.matches?.(".card,[data-area]")) { e.preventDefault(); e.target.click(); }
+});
+side.addEventListener("change", e => {
+  const i = e.target; if (!i.dataset.k) return;
+  const k = i.dataset.k, v = i.dataset.v, cur = new Set(state.f[k]||[]);
+  i.checked ? cur.add(v) : cur.delete(v);
+  state.f[k] = [...cur]; state.shown = 48; render();
+});
+function setFilters(f) { state.f = JSON.parse(JSON.stringify(f)); state.q=""; $("q").value=""; state.shown=48; render(); window.scrollTo({top:0}); }
+document.addEventListener("click", e => {
+  const t = e.target.closest("button,[data-id],[data-area],[data-open]"); if (!t) return;
+  if (t.dataset.add) { e.stopPropagation(); togglePlan(+t.dataset.add); return; }
+  if (t.dataset.close!==undefined) return closeDrawers();
+  if (t.dataset.print) return doPrint([BYID.get(+t.dataset.print)]);
+  if (t.dataset.printplan!==undefined) return doPrint(planCards());
+  if (t.dataset.clearplan!==undefined) { plan=[]; savePlan(); renderPlanBtn(); render(); return openPlan(); }
+  if (t.dataset.open) return openCard(+t.dataset.open);
+  if (t.dataset.id) return openCard(+t.dataset.id);
+  if (t.dataset.sit) return setFilters(SITS[+t.dataset.sit].f);
+  if (t.dataset.theme) return setFilters({Temak:[t.dataset.theme]});
+  if (t.dataset.area) return setFilters({Temak:AREAS[+t.dataset.area].themes});
+  if (t.dataset.quick==="tried") return setFilters({Kiprobalva:["igen"]});
+  if (t.dataset.quick==="rah") { closeDrawers(); return setFilters({SzerepAKorben:["Ráhangolódás"]}); }
+  if (t.dataset.quick==="lez") { closeDrawers(); return setFilters({SzerepAKorben:["Lezárás"]}); }
+  if (t.dataset.unq) { state.q=""; $("q").value=""; return render(); }
+  if (t.dataset.unk) { state.f[t.dataset.unk] = (state.f[t.dataset.unk]||[]).filter(v=>v!==t.dataset.unv); return render(); }
+  if (t.id==="resetall"||t.id==="resetall2") return setFilters({});
+  if (t.id==="more") { state.shown += 48; return render(); }
+  if (t.id==="dice") { const pool = CARDS.filter(c=>c.kid && c.Tipus!=="Kész csomag"); return openCard(pool[Math.floor(Math.random()*pool.length)].Id); }
+});
+main.addEventListener("change", e => { if (e.target.id==="sort") { state.sort = e.target.value; render(); } });
+window.addEventListener("afterprint", () => { $("print").innerHTML = ""; });
+
+/* ---------- indulás ---------- */
+const startId = fromHash();
+$("q").value = state.q;
+renderPlanBtn(); render();
+if (startId) openCard(startId, false);
+};
+</script>
+<script>
+(async () => {
+  const lock = document.getElementById("lock"), form = document.getElementById("lockform"),
+        pw = document.getElementById("pw"), err = document.getElementById("pwerr"), go = document.getElementById("pwgo");
+  // Helyi teszthez: ha a kartyak.js be van töltve, nincs zár.
+  if (window.BK_DATA) return window.BK_START(window.BK_DATA);
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  let enc;
+  try {
+    const r = await fetch("adatok.json?v=" + Date.now(), {cache:"no-store"});
+    if (!r.ok) throw new Error(r.status);
+    enc = await r.json();
+  } catch (e) {
+    lock.hidden = false; form.querySelector("p").textContent = "Nem sikerült betölteni az adatfájlt (adatok.json). Próbáld újra később.";
+    pw.hidden = true; go.hidden = true; return;
+  }
+  async function open(pass) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt:b64(enc.salt), iterations:enc.iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+    const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(enc.iv)}, key, b64(enc.ct));
+    const txt = await new Response(new Blob([plain]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+    return JSON.parse(txt);
+  }
+  let saved = null; try { saved = localStorage.getItem("bk-pw"); } catch (e) {}
+  if (saved) {
+    try { const d = await open(saved); return window.BK_START(d); }
+    catch (e) { try { localStorage.removeItem("bk-pw"); } catch (x) {} err.textContent = "A jelszó megváltozott. Add meg az újat."; }
+  }
+  lock.hidden = false; pw.focus();
+  form.addEventListener("submit", async ev => {
+    ev.preventDefault(); go.disabled = true; go.textContent = "Nyitás…"; err.textContent = "";
+    try {
+      const d = await open(pw.value);
+      if (document.getElementById("rem").checked) { try { localStorage.setItem("bk-pw", pw.value); } catch (e) {} }
+      lock.hidden = true; window.BK_START(d);
+    } catch (e) {
+      err.textContent = "Ez nem a jó jelszó."; go.disabled = false; go.textContent = "Belépés"; pw.select();
+    }
+  });
+})();
+</script>
+</body>
+</html>
