@@ -468,6 +468,7 @@ const FACETS = [
   {key:"Idotartam", title:"Időtartam", vals:DURS},
   {key:"SzerepAKorben", title:"Szerep a körben", vals:Object.keys(ROLE), dot:v=>ROLE[v].hex},
   {key:"Temak", title:"Témák", areas:true},
+  {key:"ertekeles", title:"Értékelés", vals:["van","4plus"], lbl:v=>v==="van"?"Van értékelése":"Legalább 4 csillag (átlag)"},
   {key:"Kidolgozottsag", title:"Kidolgozottság", vals:["Kidolgozott","Ötlettár"], hint:"A kidolgozott kártyák részletesen megírt, ellenőrzött gyakorlatok."},
   {key:"Kiprobalva", title:"Kipróbálva", vals:["igen"], lbl:()=>"Csak a kollégák által kipróbáltak"},
   {key:"Csoportforma", title:"Csoportforma", vals:FORMS_, hint:"Egyelőre csak a kidolgozott kártyáknál van megadva."},
@@ -534,7 +535,7 @@ function updateSugg() {
 /* =====================================================================
    Szűrés és keresés
    ===================================================================== */
-const valOf = (c,key) => key==="Korosztaly"?c.ages : key==="Temak"?c.themes : key==="Csoportforma"?c.forms : key==="Kiprobalva"?(c.tried?["igen"]:[]) : arr(c[key]);
+const valOf = (c,key) => key==="Korosztaly"?c.ages : key==="Temak"?c.themes : key==="Csoportforma"?c.forms : key==="Kiprobalva"?(c.tried?["igen"]:[]) : key==="ertekeles"?(c.rN?(c.rAvg>=4?["van","4plus"]:["van"]):[]) : arr(c[key]);
 const activeFacets = () => FACETS.filter(F=>!F.editor || isEd());
 const active = () => state.q.trim() || Object.values(state.f).some(v=>v&&v.length);
 function matchFacets(c, except) {
@@ -633,6 +634,7 @@ function renderHome() {
   const cnt = t => live.filter(c=>c.themes.includes(t)).length;
   const packs = live.filter(c=>c.Tipus==="Kész csomag");
   const tried = live.filter(c=>c.tried && c.Tipus!=="Kész csomag").sort((a,b)=>b.base-a.base);
+  const fav = live.filter(c=>c.rN>0).sort((a,b)=>b.rScore-a.rScore || b.rN-a.rN);
   const mine = live.filter(c=>c.statusz==="javaslat" && c.created_by===me.id);
   const sitN = s => live.filter(c=>Object.entries(s.f).every(([k,v])=>v.some(x=>valOf(c,k).includes(x)))).length;
   main.innerHTML = `
@@ -650,6 +652,7 @@ function renderHome() {
     <div class="areas">${AREAS.map((A,i)=>`<div class="area-t" style="--ac:${A.c};--abg:${A.bg}"><header><h3 data-area="${i}" tabindex="0" role="button">${esc(A.name)}</h3><span>${live.filter(c=>c.themes.some(t=>A.themes.includes(t))).length} kártya</span></header><p>${esc(A.desc)}</p><div class="tl">${A.themes.map(t=>`<button class="tchip" data-theme="${esc(t)}" style="background:var(--abg);color:var(--ac)">${esc(t)}<i>${cnt(t)}</i></button>`).join("")}</div></div>`).join("")}</div>
   </section>
   ${packs.length?`<section class="sec"><div class="sec-h"><h2>Kész 30 perces csomagok</h2><p>Ráhangolódás, fő gyakorlat és lezárás egyben.</p></div><div class="grid">${packs.map(cardHTML).join("")}</div></section>`:""}
+  ${fav.length?`<section class="sec"><div class="sec-h"><h2>A kollégák kedvencei</h2><p>A legjobbra értékelt kártyák.</p><button class="more" data-quick="best">Mind a ${fav.length}</button></div><div class="hscroll">${fav.slice(0,8).map(cardHTML).join("")}</div></section>`:""}
   ${tried.length?`<section class="sec"><div class="sec-h"><h2>Kollégák kipróbálták</h2><p>Ezek már működtek nálunk.</p><button class="more" data-quick="tried">Mind a ${tried.length}</button></div><div class="hscroll">${tried.slice(0,8).map(cardHTML).join("")}</div></section>`:""}
   ${!live.length?`<div class="empty"><h3>Még nincs kártya az adatbázisban</h3><p>${isEd()?"Töltsd fel a kártyákat a jobb felső menüben: Kártyák importálása.":"Hamarosan feltöltjük a kártyákat."}</p></div>`:""}
   `;
@@ -996,6 +999,7 @@ function bindApp() {
     if (ds.theme) return setFilters({Temak:[ds.theme]});
     if (ds.area) return setFilters({Temak:AREAS[+ds.area].themes});
     if (ds.quick==="tried") return setFilters({Kiprobalva:["igen"]});
+    if (ds.quick==="best") { state.sort = "best"; return setFilters({ertekeles:["van"]}); }
     if (ds.quick==="rah") { closeDrawers(); return setFilters({SzerepAKorben:["Ráhangolódás"]}); }
     if (ds.quick==="lez") { closeDrawers(); return setFilters({SzerepAKorben:["Lezárás"]}); }
     if (ds.unq) { state.q=""; $("q").value=""; return render(); }
